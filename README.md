@@ -1,1 +1,5 @@
-# chapter-1-sticky-patches
+# How sticky are our proteins? Quantifying hydrophobicity of the human proteome 
+
+Juami Hermine Mariama van Gils, Dea Gogishvili, Jan van Eck, Robbin Bouwmeester, Erik van Dijk, Sanne Abeln
+
+Proteins tend to bury hydrophobic residues inside their core during the folding process to provide stability to the protein structure and to prevent aggregation. Nevertheless, proteins do expose some ‘sticky’ hydrophobic residues to the solvent. These residues can play an important functional role, e.g. in protein–protein and membrane interactions. Here, we first investigate how hydrophobic protein surfaces are by providing three measures for surface hydrophobicity: the total hydrophobic surface area, the relative hydrophobic surface area and—using our MolPatch method—the largest hydrophobic patch. Secondly, we analyze how difficult it is to predict these measures from sequence: by adapting solvent accessibility predictions from NetSurfP2.0, we obtain well-performing prediction methods for the THSA and RHSA, while predicting LHP is more challenging. Finally, we analyze implications of exposed hydrophobic surfaces: we show that hydrophobic proteins typically have low expression, suggesting cells avoid an overabundance of sticky proteins.
