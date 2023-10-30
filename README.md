@@ -6,5 +6,5 @@ Proteins tend to bury hydrophobic residues inside their core during the folding 
 
 Bioinformatics Advances, Volume 2, Issue 1, 2022, vbac002, https://doi.org/10.1093/bioadv/vbac002
 
-![image](/figures/StudyOutline.jpeg)
+![image](/figures/StudyOutline.jpg)
 Outline of the study. (1) Structure-based definition represents the three hydrophobic measures: red and yellow colours indicate the surface of hydrophobic residues, the blue colour indicates the surface of hydrophilic residues. The THSA is calculated by summing the area of all hydrophobic residues (red and yellow). The RHSA is calculated by dividing the THSA by the TASA (red, yellow and blue). The LHP is the largest area of adjacent hydrophobic residues (only red). (2) We train and benchmark sequence-based prediction methods of the three hydrophobic measures. (3) THSA, RHSA and LHP values for the human proteome were predicted by the best-performing methods and used to estimate the abundance of hydrophobic proteins in various diseases and tissues
