@@ -26,10 +26,10 @@ Before running
 2. module load 2022
 3. module load 2022 Xvfb/21.1.3-GCCcore-11.3.0
 
-One should preprocess the PDB file first, to remove water molecules and split the PDB chains
+One should preprocess the PDB file first, to remove water molecules and split the PDB chains. For this run the script in ResidueBased folder:
 
 Python3 preprocess.py
 
-Run MolPatch calculations
+Run MolPatch calculations after:
 
 Python3 calculate.py
