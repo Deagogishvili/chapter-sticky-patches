@@ -1,0 +1,36 @@
+# change {root} with the root of your directory
+
+path:
+    root: /home/deag/molpatch/
+    src: /home/deag/molpatch/
+    model: /home/deag/molpatch/model/
+    data: /home/deag/molpatch/data/
+    # the directory where the full pdbs are saved
+    protein: /home/deag/molpatch/data/preprocess/unprocessed/
+    # the directory where the pdbs without heteroatoms are saved
+    hetatm: /home/deag/molpatch/data/preprocess/hetatm
+    # the directory where the pdbs without water molecules are saved
+    hoh: /home/deag/molpatch/data/preprocess/hoh/
+    #the directory where the chains are saved
+    chain: /home/deag/molpatch/data/preprocess/processed/
+
+log: True
+hydrophobic:
+  - A
+  - F
+  - C
+  - L
+  - I
+  - W
+  - V
+  - M
+  - Y
+polar:
+  - K
+  - R
+  - H
+  - D
+  - T
+  - E
+  - N
+  - Q
