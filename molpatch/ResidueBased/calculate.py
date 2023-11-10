@@ -23,25 +23,27 @@ df = pd.DataFrame()
 
 files = [f for f in listdir(path) if isfile(join(path, f)) and f.endswith('.pdb')]
 for file in files:
-    print(path+file)
-    id = ''.join(file.split('.')[:-1])
-    print(id)
-    proteinPatches = ProteinPatch(id,path+file,hydr_residues)
-    print("patches calculated")
-    patches = proteinPatches.patches
-    result_dict = {'residue_ID':[], 'patch_size':[], 'patch_rank':[], 'residue_type':[], 'protein_id':[]}
-    for i,patch in enumerate(patches):
-        residues_in_patch = patch.get_ids()
-        residues = patch.residues()
+    try:
+        print(path+file)
+        id = ''.join(file.split('.')[:-1])
+        print(id)
+        proteinPatches = ProteinPatch(id,path+file,hydr_residues)
+        print("patches calculated")
+        patches = proteinPatches.patches
+        result_dict = {'residue_ID':[], 'patch_size':[], 'patch_rank':[], 'residue_type':[], 'protein_id':[]}
+        for i,patch in enumerate(patches):
+            residues_in_patch = patch.get_ids()
+            residues = patch.residues()
 
-        for j, residue_in_patch in enumerate(residues_in_patch):
-            result_dict['residue_ID'].append(residue_in_patch[-2:])
-            result_dict['patch_size'].append(patch.size())
-            result_dict['patch_rank'].append(i)
-            result_dict['residue_type'].append(residues[j])
-            result_dict['protein_id'].append(id)
-    print("writing file")
-    pd.DataFrame(result_dict).to_csv(result_path + id + '.csv', index=False)
-    plotfile = figure_path + id + '.png'
-    proteinPatches.plot_largest_patches(plotfile)
-
+            for j, residue_in_patch in enumerate(residues_in_patch):
+                result_dict['residue_ID'].append(residue_in_patch[-2:])
+                result_dict['patch_size'].append(patch.size())
+                result_dict['patch_rank'].append(i)
+                result_dict['residue_type'].append(residues[j])
+                result_dict['protein_id'].append(id)
+        print("writing file")
+        pd.DataFrame(result_dict).to_csv(result_path + id + '.csv', index=False)
+        plotfile = figure_path + id + '.png'
+        proteinPatches.plot_largest_patches(plotfile)
+    except:
+        print(file, 'failed')
