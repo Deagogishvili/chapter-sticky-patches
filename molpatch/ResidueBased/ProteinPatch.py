@@ -5,17 +5,17 @@ from scipy.spatial import KDTree
 import networkx as nx
 from Bio.SeqUtils import seq1, seq3
 import numpy as np
-from xvfbwrapper import Xvfb
-from pyvirtualdisplay import Display
-display = Display(visible=0, size=(2560, 2048))
-display.start()
+# from xvfbwrapper import Xvfb
+# from pyvirtualdisplay import Display
+# display = Display(visible=0, size=(2560, 2048))
+# display.start()
 #from mayavi.api import OffScreenEngine
 #e = OffScreenEngine()
 #e.start()
 #import mayavi
 #mayavi.engine.current_scene.scene.off_screen_rendering = True
-from mayavi import mlab
-mlab.options.offscreen = True
+# from mayavi import mlab
+# mlab.options.offscreen = True
 #mlab.use('Agg')
 #import matplotlib
 #matplotlib.use('Agg')

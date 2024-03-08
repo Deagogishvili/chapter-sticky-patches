@@ -8,9 +8,9 @@ import yaml
 config = yaml.safe_load(open("../config.yml"))
 hydr_residues = config['hydrophobic']
 
-path = '../data/chain/'
-result_path = '../data/result/'
-figure_path = '../data/figures/'
+path = config['path']['chain']
+result_path = '/data/result/'
+figure_path = '/data/figures/'
 
 if not isdir(result_path):
     print('Output directory does not exist:', result_path, '\n Creating directory')
@@ -43,7 +43,7 @@ for file in files:
                 result_dict['protein_id'].append(id)
         print("writing file")
         pd.DataFrame(result_dict).to_csv(result_path + id + '.csv', index=False)
-        plotfile = figure_path + id + '.png'
-        proteinPatches.plot_largest_patches(plotfile)
+        # plotfile = figure_path + id + '.png'
+        # proteinPatches.plot_largest_patches(plotfile)
     except:
         print(file, 'failed')

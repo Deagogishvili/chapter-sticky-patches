@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  molpatch:
+    build: 
+      context: .
+    volumes:
+      - ./input:/data/preprocess/unprocessed
+      - ./output:/data/result
