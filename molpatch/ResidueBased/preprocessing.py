@@ -1,13 +1,11 @@
 #!/usr/bin/python3
 
-# Preprocessing of PDB files for MolPatch
-from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 from Bio.PDB import Select, PDBIO
 from Bio.PDB.PDBParser import PDBParser
-#from Bio.PDB.MMCIFParser import MMCIFParser
-from os import listdir, mkdir
-from os.path import isfile, isdir, join
+from os import listdir
+from os.path import isdir, join
 import yaml
+import tempfile
 
 class ChainSelect(Select):
     def __init__(self, chain):
@@ -19,83 +17,69 @@ class ChainSelect(Select):
         else:
             return 0
 
+def remove_hetatm(infile, outfile):
+    """ Remove heteroatoms from PDB file """
+    with open(infile, 'r') as inf, open(outfile, 'w') as outf:
+        for line in inf:
+            if not line.startswith('HETATM'):
+                outf.write(line)
 
-def remove_hetatm(indir, outdir):
-	""" Remove heteroatoms from PDB file """
-	
-	infiles = listdir(indir)
+def remove_hoh(infile, outfile):
+    """ Remove water molecules from PDB file """
+    with open(infile, 'r') as inf, open(outfile, 'w') as outf:
+        for line in inf:
+            if not line[17:20] == 'HOH':
+                outf.write(line)
 
-	for file in infiles:
-		f1 = join(indir, file)
-		f2 = join(outdir, file)
-		with open(f1, 'r') as infile:
-			with open(f2, 'w') as outfile:
-				for line in infile:
-					if not line.startswith('HETATM'):
-						outfile.write(line)
+def split_chains(infile, outdir, pdb_id):
+    """ Split PDB file into separate PDB files, each containing one chain of the PDB structure """
+    # Get structure from PDB file
+    p = PDBParser(QUIET=1)
+    structure = p.get_structure(pdb_id, infile)
+    chains = structure.get_chains()
 
+    io_w_no_h = PDBIO()
+    io_w_no_h.set_structure(structure)
 
-def remove_hoh(indir, outdir):
-	""" Remove water molecules from PDB file """
-	
-	infiles = listdir(indir)
-
-	for file in infiles:
-		f1 = join(indir, file)
-		f2 = join(outdir, file)
-		with open(f1, 'r') as infile:
-			with open(f2, 'w') as outfile:
-				for line in infile:
-					if not line[17:20] == 'HOH':
-						outfile.write(line)
-
-
-def split_chains(indir, outdir):
-	""" Split PDB file into separate PDB files, each containing one chain of the PDB structure """
-	
-	infiles = listdir(indir)
-	pdb_ids = [name.split('.')[0] for name in infiles]
-	
-	for i in range(len(infiles)):
-		print(infiles[i])
-		# Get structure from PDB file
-		p = PDBParser(QUIET=1)
-		structure = p.get_structure(pdb_ids[i], join(indir, infiles[i]))
-		chains = structure.get_chains()
-		
-		io_w_no_h = PDBIO()
-		io_w_no_h.set_structure(structure)
-		
-		# Split into chains and save each chain to a new file
-		for chain in chains:
-			# Output file
-			outfile = join(outdir, ''.join([pdb_ids[i], '_', chain.id, '.pdb']))
-			io_w_no_h.save(outfile, ChainSelect(chain.id))
+    # Split into chains and save each chain to a new file
+    for chain in chains:
+        # Output file
+        outfile = join(outdir, ''.join([pdb_id, '_', chain.id, '.pdb']))
+        io_w_no_h.save(outfile, ChainSelect(chain.id))
 
 def main():
-	config = yaml.safe_load(open("../config.yml"))
-	
-	pdbdir = config['path']['protein']
-	hetatmdir = config['path']['hetatm']
-	chaindir = config['path']['chain']
-	hohdir = config['path']['hoh']
-	
-	if not isdir(pdbdir):
-		print('ERROR: directory with PDB files does not exist, check path\n', pdbdir)
-		exit(-1)
-	if not isdir(hetatmdir):
-		print('Directory does not exist:', hetatmdir, '\n Creating directory')
-		mkdir(hetatmdir)
-	if not isdir(hohdir):
-		print('Directory does not exist:', hohdir, '\n Creating directory')
-		mkdir(hohdir)
-	if not isdir(chaindir):
-		print('Directory does not exist:', chaindir, '\n Creating directory')
-		mkdir(chaindir)
-	
-	remove_hetatm(pdbdir, hetatmdir)
-	remove_hoh(hetatmdir, hohdir)
-	split_chains(hohdir, chaindir)
+    config = yaml.safe_load(open("../config.yml"))
+    
+    pdb_dir = config['path']['input']
+    processed_dir = config['path']['processed']
+    
+    if not isdir(pdb_dir):
+        print('ERROR: directory with PDB files does not exist, check path\n', pdb_dir)
+        return
+    
+    if not isdir(processed_dir):
+        print('ERROR: directory with for processed PDB files does not exist, check path\n', processed_dir)
+        return
+    
+    for pdb_file in listdir(pdb_dir):
+        try:
+            pdb_id = pdb_file.split('.')[0]
+            infile_path = join(pdb_dir, pdb_file)
+            
+            # Create temporary directories for intermediate steps
+            with tempfile.TemporaryDirectory() as hetatm_dir, tempfile.TemporaryDirectory() as hoh_dir:
+                # Process through remove_hetatm
+                hetatm_path = join(hetatm_dir, pdb_file)
+                remove_hetatm(infile_path, hetatm_path)
+                
+                # Process through remove_hoh
+                hoh_path = join(hoh_dir, pdb_file)
+                remove_hoh(hetatm_path, hoh_path)
+                
+                # Final step: split_chains
+                split_chains(hoh_path, processed_dir, pdb_id)
+        except:
+            print(f"unable to preprocess {pdb_file}")
 
 if __name__ == '__main__':
-	main()
+    main()

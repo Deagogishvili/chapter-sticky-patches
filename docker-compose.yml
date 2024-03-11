@@ -1,9 +1,10 @@
 version: '3'
 
 services:
-  molpatch:
-    build: 
-      context: .
+  molpatch_plot:
+    build: .
     volumes:
-      - ./input:/data/preprocess/unprocessed
-      - ./output:/data/result
+      - ./data/input:/data/input
+      - ./data/processed:/data/processed
+      - ./data/result:/data/result
+      - ./data/figure:/data/figure

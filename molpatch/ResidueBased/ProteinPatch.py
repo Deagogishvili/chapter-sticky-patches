@@ -1,28 +1,11 @@
 from Bio.PDB.ResidueDepth import get_surface
 from Bio.PDB import PDBParser
-from Bio.PDB import MMCIFParser
 from scipy.spatial import KDTree
 import networkx as nx
-from Bio.SeqUtils import seq1, seq3
+from Bio.SeqUtils import seq1
 import numpy as np
-# from xvfbwrapper import Xvfb
-# from pyvirtualdisplay import Display
-# display = Display(visible=0, size=(2560, 2048))
-# display.start()
-#from mayavi.api import OffScreenEngine
-#e = OffScreenEngine()
-#e.start()
-#import mayavi
-#mayavi.engine.current_scene.scene.off_screen_rendering = True
-# from mayavi import mlab
-# mlab.options.offscreen = True
-#mlab.use('Agg')
-#import matplotlib
-#matplotlib.use('Agg')
-#import matplotlib.pyplot as plt
 from Bio.PDB.DSSP import dssp_dict_from_pdb_file
 from Bio.PDB import Selection
-#from ResidueBased.Patch import ResiduePatch
 from Patch import ResiduePatch
 
 class ProteinPatch():
@@ -152,7 +135,9 @@ class ProteinPatch():
         """
         Plot the largest patch
         """
-
+        from mayavi import mlab
+        mlab.options.offscreen = True
+        
         largest_patch = self.largest_patch()
         print('largest_patch',largest_patch.size())
         #change color of largest patch
@@ -181,8 +166,8 @@ class ProteinPatch():
         tube = mlab.pipeline.tube(pts, tube_radius=0.05, figure=fig)
         mlab.pipeline.surface(tube,colormap='Reds', figure=fig)
         #mlab.process_ui_events()
-        f = mlab.gcf()
-        f.scene._lift()
+        # f = mlab.gcf()
+        # f.scene._lift()
         #imgmap = mlab.screenshot(figure=fig, mode='rgba', antialiased=True)
         #mlab.close()
         #mlab.show()
@@ -192,7 +177,7 @@ class ProteinPatch():
         #fig2 = plt.figure(figsize=(10, 15))
         #plt.imshow(imgmap)#, zorder=4)
         #plt.plot(np.arange(0, 480), np.arange(480, 0, -1), 'r-')
-        #plt.savefig(outfile, transparent=True, bbox_inches='tight')
+        # plt.savefig(outfile, transparent=True, bbox_inches='tight')
 
     def _sidechain_center(self, atoms):
         vectors = [atom.get_vector().get_array() for atom in atoms]

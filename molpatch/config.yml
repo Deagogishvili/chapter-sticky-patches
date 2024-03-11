@@ -1,20 +1,9 @@
-# change {root} with the root of your directory
-
 path:
-    root: /
-    src: /
-    model: /model/
-    data: /data/
-    # the directory where the full pdbs are saved
-    protein: /data/preprocess/unprocessed/
-    # the directory where the pdbs without heteroatoms are saved
-    hetatm: /data/preprocess/hetatm
-    # the directory where the pdbs without water molecules are saved
-    hoh: /data/preprocess/hoh/
-    #the directory where the chains are saved
-    chain: /data/preprocess/processed/
+    input: ../../data/input
+    processed: ../../data/processed/
+    result: ../../data/result/
+    figure: ../../data/figure/
 
-log: True
 hydrophobic:
   - A
   - F
